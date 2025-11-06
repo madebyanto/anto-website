@@ -1,0 +1,161 @@
+<!doctype html>
+
+<html lang="it">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>WiiU-3DS-Dev — Launcher</title>
+  <style>
+    :root{
+      --bg:#0b1220;
+      --card:#e6f0ff;
+      --glass: rgba(255,255,255,0.06);
+      --accent:#1ea7ff;
+      --muted:rgba(255,255,255,0.7);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    }
+    html,body{height:100%;margin:0;background:linear-gradient(180deg,#071021 0%, #071733 50%, #0b1220 100%);color:#fff}
+    /* subtle stars background */
+    body::after{content:"";position:fixed;inset:0;pointer-events:none;background-image:radial-gradient(rgba(255,255,255,0.02) 1px, transparent 1px);background-size:40px 40px;opacity:0.6}.wrap{max-width:1100px;margin:40px auto;padding:28px}
+header{display:flex;align-items:center;gap:16px}
+.logo{width:84px;height:56px;border-radius:12px;background:linear-gradient(180deg,var(--accent),#275ea7);display:flex;align-items:center;justify-content:center;box-shadow:0 8px 24px rgba(0,0,0,0.6);font-weight:700}
+.title{font-size:20px;font-weight:700}
+.subtitle{color:var(--muted);font-size:13px}
+
+/* grid of tiles */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px;margin-top:22px}
+.tile{background:linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02));border-radius:14px;padding:18px;display:flex;flex-direction:column;gap:12px;align-items:flex-start;cursor:pointer;transition:transform .14s cubic-bezier(.2,.9,.25,1),box-shadow .14s;user-select:none}
+.tile:focus{outline:3px solid rgba(30,167,255,0.18)}
+.tile:hover{transform:translateY(-6px);box-shadow:0 18px 40px rgba(3,10,20,0.6)}
+.tile .icon{width:56px;height:56px;border-radius:10px;display:flex;align-items:center;justify-content:center;background:var(--glass);flex:0 0 56px}
+.tile h3{margin:0;font-size:16px}
+.tile p{margin:0;color:var(--muted);font-size:13px}
+
+.footer{margin-top:18px;color:var(--muted);font-size:13px;display:flex;justify-content:space-between;align-items:center}
+
+/* big center area for Wii U-like look */
+.console{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.06));padding:24px;border-radius:18px;box-shadow:0 30px 80px rgba(2,6,12,0.6)}
+
+/* focus ring for keyboard nav */
+.tile[aria-selected="true"]{box-shadow:0 22px 56px rgba(30,167,255,0.12);transform:translateY(-10px)}
+
+/* responsive */
+@media (max-width:560px){.grid{grid-template-columns:repeat(2,1fr)}.wrap{padding:14px}}
+
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="logo">W3D</div>
+      <div>
+        <div class="title">WiiU-3DS-Dev</div>
+        <div class="subtitle">Raccoglitore utility — seleziona un'app per aprirla</div>
+      </div>
+    </header><main class="console" role="main">
+  <div class="grid" id="grid" tabindex="0">
+    <!-- Tiles: modifica href per puntare alle cartelle/sotto-siti effettivi -->
+
+    <a class="tile" href="./run-js.html" data-key="1" aria-label="JSU — Esegui codice JS nel tuo browser">
+      <div style="display:flex;gap:12px;align-items:center;width:100%">
+        <div class="icon" aria-hidden>
+          <!-- JS icon -->
+          <svg width="34" height="34" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="2" width="20" height="20" rx="3" fill="white" opacity="0.06"/><path d="M7.5 7.5L11 11L7.5 14.5" stroke="white" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M13.5 7.5L17 11L13.5 14.5" stroke="white" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <div style="flex:1">
+          <h3>JSU</h3>
+          <p>Esegui codice JS nel tuo browser</p>
+        </div>
+      </div>
+    </a>
+
+    <a class="tile" href="http://sharemiishot.aurastudioitalia.it" data-key="2" aria-label="ShareMiiShot — trasferisci immagini da Wii U/3DS a telefono o PC">
+      <div style="display:flex;gap:12px;align-items:center;width:100%">
+        <div class="icon" aria-hidden>
+          <!-- Camera icon -->
+          <svg width="34" height="34" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="2" width="20" height="20" rx="3" fill="white" opacity="0.04"/><path d="M4 8.5H7L8.5 6H15.5L17 8.5H20" stroke="white" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="13.2" r="3.2" stroke="white" stroke-width="1.4"/></svg>
+        </div>
+        <div style="flex:1">
+          <h3>ShareMiiShot</h3>
+          <p>Trasferisci immagini da Wii U / 3DS a telefono o PC</p>
+        </div>
+      </div>
+    </a>
+
+    <!-- Esempio: tile segnaposto -->
+    <div class="tile" role="button" tabindex="0" aria-label="Aggiungi sito">
+      <div style="display:flex;gap:12px;align-items:center;width:100%">
+        <div class="icon">+</div>
+        <div style="flex:1">
+          <h3>Aggiungi sito</h3>
+          <p>Crea una nuova utility nella directory</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="footer">
+    <div>Locale: <strong>./</strong></div>
+    <div>Usa freccia sin/dx per navigare • Invio per aprire</div>
+  </div>
+</main>
+
+  </div>  <script>
+    // Keyboard navigation and focus management for tiles
+    (function(){
+      const grid = document.getElementById('grid');
+      const tiles = Array.from(grid.querySelectorAll('.tile, a.tile'));
+      let index = 0;
+
+      function setSelected(i){
+        tiles.forEach((t,idx)=>{
+          t.setAttribute('aria-selected', idx===i ? 'true' : 'false');
+          if(idx===i) t.focus();
+        });
+        index = i;
+      }
+
+      // make tiles focusable
+      tiles.forEach(t => t.setAttribute('tabindex', '-1'));
+      // initial select
+      setTimeout(()=>setSelected(0),80);
+
+      grid.addEventListener('keydown', (e)=>{
+        const cols = getComputedStyle(grid).gridTemplateColumns.split(' ').length || 3;
+        if(e.key === 'ArrowRight'){
+          e.preventDefault(); setSelected(Math.min(index+1, tiles.length-1));
+        } else if(e.key === 'ArrowLeft'){
+          e.preventDefault(); setSelected(Math.max(index-1,0));
+        } else if(e.key === 'ArrowDown'){
+          e.preventDefault(); setSelected(Math.min(index + cols, tiles.length-1));
+        } else if(e.key === 'ArrowUp'){
+          e.preventDefault(); setSelected(Math.max(index - cols, 0));
+        } else if(e.key === 'Enter'){
+          e.preventDefault(); const t = tiles[index]; if(t && t.href) window.location = t.href;
+        }
+      });
+
+      // click / pointer behavior
+      tiles.forEach((t, i)=>{
+        t.addEventListener('click', ()=>{
+          setSelected(i);
+        });
+        t.addEventListener('dblclick', ()=>{
+          if(t.href) window.location = t.href;
+        });
+        t.addEventListener('focus', ()=> setSelected(i));
+      });
+
+      // make grid focusable by clicking anywhere
+      grid.addEventListener('click', ()=> grid.focus());
+
+      // small helper: allow open in new tab with ctrl/command+enter
+      document.addEventListener('keydown', (e)=>{
+        if((e.ctrlKey||e.metaKey) && e.key === 'Enter'){
+          const t = tiles[index]; if(t && t.href) window.open(t.href, '_blank');
+        }
+      });
+    })();
+  </script></body>
+</html>
