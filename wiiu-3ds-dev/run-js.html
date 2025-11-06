@@ -1,5 +1,4 @@
 <!doctype html>
-
 <html lang="it">
 <head>
   <meta charset="utf-8" />
@@ -25,9 +24,11 @@
   <header>
     <strong>Esegui JS — playground</strong>
     <div style="margin-left:auto;display:flex;gap:8px;align-items:center">
-      <span class="hint">Scrivi `alert('ciao')` e premi Run → vedrai l'alert nel riquadro a destra</span>
+      <span class="hint">Scrivi <code>alert('ciao')</code> e premi Run → vedrai l'alert nel riquadro a destra</span>
     </div>
-  </header>  <main>
+  </header>
+
+  <main>
     <div class="panel">
       <label style="font-weight:600;margin-bottom:6px">Editor JavaScript</label>
       <textarea id="editor">// Esempio: alert('Ciao dal browser!')
@@ -38,42 +39,70 @@
         <button id="sampleBtn">Inserisci esempio</button>
         <button id="newtabBtn">Apri in nuova scheda</button>
       </div>
-    </div><div class="panel">
-  <label style="font-weight:600;margin-bottom:6px">Output (iframe con sandbox)</label>
-  <!-- sandbox: allow-scripts per eseguire solo JS dentro l'iframe -->
-  <iframe id="output" sandbox="allow-scripts"></iframe>
-</div>
+    </div>
 
-  </main>  <footer>
+    <div class="panel">
+      <label style="font-weight:600;margin-bottom:6px">Output (iframe con sandbox)</label>
+      <iframe id="output" sandbox="allow-scripts"></iframe>
+    </div>
+  </main>
+
+  <footer>
     <div style="display:flex;justify-content:space-between;align-items:center">
       <div class="hint">Attenzione: questo esegue codice JS localmente. Non eseguire codice non fidato.</div>
       <div class="hint">Salva il file come <code>.html</code> e aprilo nel browser.</div>
     </div>
-  </footer><script>
-  const editor = document.getElementById('editor');
-  const runBtn = document.getElementById('runBtn');
-  const clearBtn = document.getElementById('clearBtn');
-  const sampleBtn = document.getElementById('sampleBtn');
-  const output = document.getElementById('output');
-  const newtabBtn = document.getElementById('newtabBtn');
+  </footer>
 
-  // Funzione che costruisce un documento HTML con lo script inserito
-  function buildSrcDoc(code){
-    // Evitiamo che la stringa contenga </script> che chiuderebbe il tag script in modo non intenzionaleconst safeCode = code.replace(/<\\/g, '<\\\').replace(/<\/script>/gi, '<\\/script>');
-
-return `<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head><body>
   <script>
-    try{\n${safeCode}\n}catch(e){\n  // mostra l'errore nella console dell'iframe
+    const editor = document.getElementById('editor');
+    const runBtn = document.getElementById('runBtn');
+    const clearBtn = document.getElementById('clearBtn');
+    const sampleBtn = document.getElementById('sampleBtn');
+    const output = document.getElementById('output');
+    const newtabBtn = document.getElementById('newtabBtn');
 
-console.error('Errore eseguendo il codice:', e); } </script> </body></html>`; }
+    // Funzione che costruisce un documento HTML con lo script inserito
+    function buildSrcDoc(code){
+      // Evitiamo che la stringa contenga </script> che chiuderebbe il tag script in modo non intenzionale
+      const safeCode = code.replace(/<\//g, '<\\/').replace(/<\/script>/gi, '<\\/script>');
+      return `<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head><body>
+        <script>
+          try {
+            ${safeCode}
+          } catch(e) {
+            console.error('Errore eseguendo il codice:', e);
+          }
+        <\\/script>
+      </body></html>`;
+    }
 
-function runCode(){ const code = editor.value; output.srcdoc = buildSrcDoc(code); }
+    function runCode(){
+      const code = editor.value;
+      output.srcdoc = buildSrcDoc(code);
+    }
 
-runBtn.addEventListener('click', runCode); clearBtn.addEventListener('click', ()=>{ editor.value = ''; output.srcdoc = '<!doctype html><html><body></body></html>'; }); sampleBtn.addEventListener('click', ()=>{ editor.value = "alert('Ciao dal playground!');"; });
+    runBtn.addEventListener('click', runCode);
 
-newtabBtn.addEventListener('click', ()=>{ const win = window.open(); if(!win) return alert('Impossibile aprire una nuova finestra (popup bloccato).'); win.document.open(); win.document.write(buildSrcDoc(editor.value)); win.document.close(); });
+    clearBtn.addEventListener('click', ()=>{
+      editor.value = '';
+      output.srcdoc = '<!doctype html><html><body></body></html>';
+    });
 
-// inizializza iframe vuoto output.srcdoc = '<!doctype html><html><body></body></html>'; </script>
+    sampleBtn.addEventListener('click', ()=>{
+      editor.value = "alert('Ciao dal playground!');";
+    });
 
+    newtabBtn.addEventListener('click', ()=>{
+      const win = window.open();
+      if(!win) return alert('Impossibile aprire una nuova finestra (popup bloccato).');
+      win.document.open();
+      win.document.write(buildSrcDoc(editor.value));
+      win.document.close();
+    });
+
+    // inizializza iframe vuoto
+    output.srcdoc = '<!doctype html><html><body></body></html>';
+  </script>
 </body>
-    </html>
+      </html>
