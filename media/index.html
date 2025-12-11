@@ -1,1 +1,67 @@
-<h1>Hub media Anto</h1>
+<!DOCTYPE html><html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Media personali - Anto</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f2f2f2;
+      margin: 0;
+      padding: 20px;
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    .section {
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      margin-bottom: 25px;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+    }
+    .section h2 {
+      margin-top: 0;
+    }
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 15px;
+      margin-top: 15px;
+    }
+    .gallery img {
+      width: 100%;
+      border-radius: 10px;
+      border: 1px solid #ddd;
+    }
+    .item-title {
+      font-weight: bold;
+      margin-top: 10px;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Media Personali</h1>  <!-- SEZIONE BIGLIETTI AEREO PER OPEN DAY -->  <div class="section" id="biglietti-openday">
+    <h2>Biglietti Aereo per Open Day</h2>
+    <div class="gallery">
+      <div>
+        <img src="media/bpass_france.png" alt="Biglietto Francia" />
+        <div class="item-title">BIGLIETTO AEREO (FRANCE)</div>
+      </div>
+      <div>
+        <img src="media/bpass_france_retro.png" alt="Biglietto Francia Retro" />
+        <div class="item-title">BIGLIETTO AEREO (FRANCE) RETRO</div>
+      </div>
+      <div>
+        <img src="media/bpass_english.png" alt="Biglietto English" />
+        <div class="item-title">BIGLIETTO AEREO (ENGLISH)</div>
+      </div>
+      <div>
+        <img src="media/bpass_english_retro.png" alt="Biglietto English Retro" />
+        <div class="item-title">BIGLIETTO AEREO (ENGLISH) RETRO</div>
+      </div>
+    </div>
+  </div>  <!-- QUI POTRAI AGGIUNGERE ALTRE SEZIONI FUTURE --></body>
+</html>
