@@ -5,440 +5,297 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Portfolio • Anto</title>
 
-  <!-- Font Awesome per le icone social -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet">
 
-  <!-- ===== STILI ===== -->
   <style>
-  /* -----------------------
-     VARIABILI / THEME
-     ----------------------- */
-  :root{
-    --bg: #0f0f0f;
-    --panel: #1a1a1a;
-    --muted: #2a2a2a;
-    --text: #eaeaea;
-    --accent: #ffd700; /* giallo primary */
-    --accent-strong: #ffb400;
-    --youtube: #ff0000;
-    --tiktok: #000000;
-    --discord: #7289DA;
-    --telegram: #0088CC;
-    --github: #333333;
+    /* -----------------------
+       THEME & VARIABLES (Adaptive)
+       ----------------------- */
+    :root {
+      /* Palette Dark (Default) */
+      --bg-gradient: radial-gradient(circle at top right, #1a1a2e, #0f0f0f);
+      --glass-bg: rgba(255, 255, 255, 0.05);
+      --glass-border: rgba(255, 255, 255, 0.1);
+      --text: #f0f0f0;
+      --text-muted: rgba(255, 255, 255, 0.7);
+      --accent: #0099ff;
+      --card-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.8);
+    }
 
-    /* header height dinamico (sovrascritto da JS) */
-    --header-h: 120px;
-    --radius: 10px;
-    --glass: rgba(255,255,255,0.03);
-  }
+    @media (prefers-color-scheme: light) {
+      :root {
+        /* Palette Light */
+        --bg-gradient: radial-gradient(circle at top right, #fdfbfb, #ebedee);
+        --glass-bg: rgba(0, 0, 0, 0.03);
+        --glass-border: rgba(0, 0, 0, 0.08);
+        --text: #2d3436;
+        --text-muted: rgba(0, 0, 0, 0.6);
+        --accent: #0099ff;
+        --card-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.1);
+      }
+    }
 
-  /* -----------------------
-     RESET MINIMO
-     ----------------------- */
-  *{box-sizing:border-box}
-  html,body{height:100%;margin:0;padding:0;background:var(--bg);color:var(--text);font-family:Inter,Segoe UI,Roboto,Arial,sans-serif;-webkit-font-smoothing:antialiased}
-  a{color:inherit}
-  img{max-width:100%;display:block}
+    /* -----------------------
+       RESET & BASE
+       ----------------------- */
+    * { box-sizing: border-box; transition: all 0.3s ease; }
+    html, body { 
+      margin: 0; padding: 0; min-height: 100vh;
+      background: var(--bg-gradient);
+      color: var(--text);
+      font-family: 'Poppins', sans-serif;
+      scroll-behavior: smooth;
+    }
 
-  /* -----------------------
-     LAYOUT HEADER / NAV
-     ----------------------- */
-  header.site-header{
-    position:fixed;
-    top:0;left:0;right:0;
-    background:linear-gradient(180deg, rgba(255,255,255,0.02), transparent);
-    backdrop-filter: blur(4px);
-    border-bottom: 1px solid rgba(255,255,255,0.03);
-    z-index:1200;
-    padding:12px 16px;
-    display:flex;
-    align-items:center;
-    gap:16px;
-  }
+    /* -----------------------
+       GLASSMORPHISM CORE
+       ----------------------- */
+    .glass {
+      background: var(--glass-bg);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid var(--glass-border);
+      border-radius: 20px;
+    }
 
-  .header-inner{
-    width:100%;
-    max-width:1100px;
-    margin:0 auto;
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    gap:16px;
-  }
+    /* -----------------------
+       HEADER
+       ----------------------- */
+    header.site-header {
+      position: fixed;
+      top: 15px; left: 50%;
+      transform: translateX(-50%);
+      width: 90%; max-width: 1100px;
+      z-index: 1000;
+      padding: 10px 25px;
+    }
 
-  .brand {
-    display:flex;
-    align-items:center;
-    gap:12px;
-  }
+    .header-inner {
+      display: flex; align-items: center; justify-content: space-between;
+    }
 
-  .brand h1{
-    margin:0;
-    color:var(--accent);
-    font-size:1.15rem;
-    letter-spacing:0.6px;
-  }
+    .brand { display: flex; align-items: center; gap: 12px; }
+    .mini-avatar { 
+        width: 45px; height: 45px; border-radius: 50%; 
+        border: 2px solid var(--accent); overflow: hidden;
+    }
 
-  /* immagine profilo piccola nell'header */
-  .brand .mini-avatar{
-    width:56px;
-    height:56px;
-    border-radius:50%;
-    overflow:hidden;
-    border:2px solid var(--accent);
-    display:inline-block;
-  }
-  .brand .mini-avatar img{width:100%;height:100%;object-fit:cover;display:block}
+    nav.main-nav { display: flex; gap: 15px; }
+    nav.main-nav a {
+      text-decoration: none; color: var(--text);
+      font-size: 0.9rem; font-weight: 500;
+      padding: 8px 15px; border-radius: 12px;
+    }
+    nav.main-nav a:hover, nav.main-nav a.active {
+      background: var(--accent); color: #000;
+    }
 
-  /* NAV */
-  nav.main-nav{
-    display:flex;
-    gap:10px;
-    align-items:center;
-  }
-  nav.main-nav a{
-    color:var(--text);
-    text-decoration:none;
-    padding:8px 12px;
-    border-radius:8px;
-    font-weight:600;
-    font-size:0.95rem;
-    transition: background .18s, color .18s, transform .12s;
-  }
-  nav.main-nav a:hover{background:var(--glass); transform:translateY(-2px)}
-  nav.main-nav a.active{background:linear-gradient(90deg, rgba(255,215,0,0.12), rgba(255,180,0,0.06)); color:var(--accent);}
+    /* -----------------------
+       MAIN CONTENT
+       ----------------------- */
+    main {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 120px 20px 60px;
+    }
 
-  /* hamburger mobile */
-  .hamburger{
-    display:none;
-    background:transparent;
-    border:0;
-    padding:8px;
-    border-radius:8px;
-    color:var(--text);
-  }
-  .hamburger:focus{outline:2px solid rgba(255,255,255,0.06)}
+    section {
+      margin-bottom: 50px;
+      padding: 30px;
+      opacity: 0; transform: translateY(30px);
+    }
+    section.visible { opacity: 1; transform: translateY(0); }
 
-  /* -----------------------
-     MAIN / SECTIONS
-     ----------------------- */
-  main{
-    max-width:1100px;
-    margin:0 auto;
-    padding: calc(var(--header-h) + 28px) 18px 80px;
-  }
+    /* -----------------------
+       HERO / ABOUT
+       ----------------------- */
+    .hero { display: flex; gap: 30px; align-items: center; flex-wrap: wrap; }
+    .avatar-container {
+      position: relative; width: 180px; height: 180px;
+    }
+    .avatar-container img {
+      width: 100%; height: 100%; object-fit: cover;
+      border-radius: 30px; border: 2px solid var(--glass-border);
+    }
 
-  section{
-    margin:36px 0;
-    background: linear-gradient(180deg, rgba(255,255,255,0.01), transparent);
-    border-radius: var(--radius);
-    padding:22px;
-    transition: transform .6s cubic-bezier(.2,.9,.2,1), opacity .6s;
-    opacity:0;
-    transform: translateY(28px);
-    box-shadow: 0 6px 18px rgba(0,0,0,0.35);
-  }
-  section.visible{opacity:1; transform:none}
-  h2{margin:0 0 12px 0; color:var(--accent)}
-  p.lead{margin:0;color:rgba(234,234,234,0.85)}
+    /* -----------------------
+       SKILLS
+       ----------------------- */
+    .skills-grid { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 15px; }
+    .skill-chip {
+      padding: 8px 18px; font-size: 0.85rem; font-weight: 600;
+      border-radius: 50px; background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+    }
+    .skill-chip:hover { background: var(--accent); color: #000; transform: scale(1.05); }
 
-  /* -----------------------
-     HERO (CHI SONO)
-     ----------------------- */
-  .hero{
-    display:flex;
-    gap:20px;
-    align-items:center;
-    flex-wrap:wrap;
-  }
+    /* -----------------------
+       PROJECT CARDS
+       ----------------------- */
+    .projects-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px; margin-top: 20px;
+    }
+    .card {
+      padding: 20px; display: flex; flex-direction: column; justify-content: space-between;
+      box-shadow: var(--card-shadow);
+    }
+    .card h3 { margin: 0 0 10px 0; color: var(--accent); }
+    .btn {
+      margin-top: 15px; padding: 10px; text-align: center;
+      text-decoration: none; border-radius: 12px; font-weight: 700;
+    }
+    .btn.primary { background: var(--accent); color: #000; }
+    .btn.primary:hover { opacity: 0.8; box-shadow: 0 0 15px var(--accent); }
 
-  .hero .avatar{
-    width:160px;
-    height:160px;
-    border-radius:16px;
-    overflow:hidden;
-    border:3px solid var(--accent);
-    background:linear-gradient(135deg,#222,#111);
-    flex:0 0 160px;
-  }
-  .avatar img{width:100%;height:100%;object-fit:cover;display:block}
+    /* -----------------------
+       SOCIALS
+       ----------------------- */
+    .social-row { display: flex; flex-wrap: wrap; gap: 15px; }
+    .social-link {
+      flex: 1; min-width: 120px; padding: 15px;
+      text-align: center; border-radius: 15px;
+      color: #fff; text-decoration: none; font-weight: 600;
+      display: flex; flex-direction: column; align-items: center; gap: 8px;
+    }
+    .social-youtube { background: #ff0000; }
+    .social-tiktok { background: #000; }
+    .social-discord { background: #5865F2; }
+    .social-telegram { background: #0088cc; }
+    .social-github { background: #333; }
 
-  .hero .bio{
-    flex:1 1 360px;
-  }
-  .hero .bio h3{margin:0 0 8px 0}
-  .hero .bio ul{margin:10px 0 0 0;padding:0;display:flex;gap:8px;flex-wrap:wrap;list-style:none}
-  .hero .bio ul li{background:var(--muted);padding:6px 10px;border-radius:8px;font-weight:600;color:rgba(255,255,255,0.9)}
-
-  /* -----------------------
-     SKILLS
-     ----------------------- */
-  .skills-grid{display:flex;gap:12px;flex-wrap:wrap;margin-top:8px}
-  .skill-chip{
-    background:linear-gradient(180deg, rgba(255,255,255,0.015), rgba(255,255,255,0.01));
-    padding:8px 10px;border-radius:10px;font-weight:700;border:1px solid rgba(255,255,255,0.02)
-  }
-  .skill-chip:hover{transform:translateY(-4px);box-shadow: 0 6px 18px rgba(0,0,0,0.45)}
-
-  /* -----------------------
-     PROGETTI - CARDS
-     ----------------------- */
-  .projects-grid{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
-    gap:16px;
-    margin-top:12px;
-  }
-
-  .card{
-    background:linear-gradient(180deg, rgba(255,255,255,0.01), transparent);
-    border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:10px;border:1px solid rgba(255,255,255,0.03);
-  }
-  .card .title{display:flex;align-items:center;justify-content:space-between;gap:12px}
-  .card h3{margin:0;font-size:1.05rem}
-  .card p{margin:0;color:rgba(234,234,234,0.88)}
-  .card .meta{font-size:0.85rem;color:rgba(234,234,234,0.6)}
-  .card .actions{display:flex;gap:8px;margin-top:6px}
-  .btn{
-    display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:8px;border:0;cursor:pointer;font-weight:800;text-decoration:none;
-  }
-  .btn.primary{background:var(--accent);color:#000}
-  .btn.ghost{background:transparent;color:var(--text);border:1px solid rgba(255,255,255,0.04)}
-  .btn:focus{outline:2px solid rgba(255,255,255,0.06)}
-
-  /* -----------------------
-     SOCIAL / CONTATTI
-     ----------------------- */
-  .social-row, .contact-row{display:flex;flex-wrap:wrap;gap:12px;margin-top:8px}
-  .social-link{
-    display:inline-flex;align-items:center;gap:10px;padding:10px 14px;border-radius:10px;color:#fff;font-weight:800;text-decoration:none;
-    min-width:140px;justify-content:flex-start;
-  }
-  .social-link i{font-size:1.25rem; width:22px;text-align:center}
-
-  .social-youtube{background:var(--youtube)}
-  .social-tiktok{background:var(--tiktok); color:#f5f5f5}
-  .social-discord{background:var(--discord)}
-  .social-telegram{background:var(--telegram)}
-  .social-github{background:var(--github)}
-
-  /* aggiunta icona a sinistra con padding */
-  .social-link .label{display:inline-block}
-
-  /* -----------------------
-     FORM
-     ----------------------- */
-  form.contact-form{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:10px}
-  form.contact-form .full{grid-column:1/-1}
-  input[type="text"], input[type="email"], textarea{
-    background:var(--muted);border:1px solid rgba(255,255,255,0.02);padding:10px;border-radius:8px;color:var(--text);
-  }
-  textarea{min-height:120px;resize:vertical}
-  .submit-row{display:flex;gap:12px;align-items:center}
-  .hint{font-size:0.9rem;color:rgba(255,255,255,0.6)}
-
-  /* -----------------------
-     FOOTER
-     ----------------------- */
-  footer.site-footer{margin-top:32px;padding:18px;border-radius:10px;background:var(--panel);text-align:center;color:rgba(255,255,255,0.7)}
-
-  /* -----------------------
-     RESPONSIVE
-     ----------------------- */
-  @media(max-width:880px){
-    .hero{flex-direction:column;align-items:flex-start}
-    .avatar{width:120px;height:120px;flex:0 0 120px}
-    form.contact-form{grid-template-columns:1fr}
-    nav.main-nav{display:none}
-    .hamburger{display:inline-block}
-  }
-
-  @media(max-width:480px){
-    main{padding-left:12px;padding-right:12px}
-    .brand h1{font-size:1rem}
-  }
+    /* -----------------------
+       MOBILE
+       ----------------------- */
+    @media (max-width: 768px) {
+      nav.main-nav { display: none; }
+      .hero { text-align: center; justify-content: center; }
+      header.site-header { top: 10px; width: 95%; }
+    }
   </style>
 </head>
 <body>
 
-  <!-- HEADER -->
-  <header class="site-header" role="banner" id="siteHeader" aria-label="Barra principale">
+  <header class="site-header glass">
     <div class="header-inner">
-      <div class="brand" aria-hidden="false">
-        <div class="mini-avatar" aria-hidden="true">
-          <img src="anto.png" alt="Anto avatar">
+      <div class="brand">
+        <div class="mini-avatar">
+          <img src="anto.jpg" alt="Anto">
         </div>
-        <h1>Anto</h1>
+        <h2 style="font-size: 1.1rem; margin:0;">Anto</h2>
       </div>
-
-      <nav class="main-nav" role="navigation" aria-label="Navigazione principale" id="mainNav">
-        <a href="#about" data-target="about">Chi sono</a>
-        <a href="#skills" data-target="skills">Skills</a>
-        <a href="#projects" data-target="projects">Progetti</a>
-        <a href="#social" data-target="social">Social</a>
-        <a href="#contact" data-target="contact">Contattami</a>
-      </nav>
-
-      <button class="hamburger" id="hamburger" aria-expanded="false" aria-controls="mobileMenu" title="Apri menu">
-        <i class="fa fa-bars" aria-hidden="true"></i>
-      </button>
-    </div>
-
-    <div id="mobileMenu" style="display:none;padding:10px 16px;">
-      <nav aria-label="Menu mobile">
-        <a href="#about" data-target="about" style="display:block;padding:8px 6px">Chi sono</a>
-        <a href="#skills" data-target="skills" style="display:block;padding:8px 6px">Skills</a>
-        <a href="#projects" data-target="projects" style="display:block;padding:8px 6px">Progetti</a>
-        <a href="#social" data-target="social" style="display:block;padding:8px 6px">Social</a>
-        <a href="#contact" data-target="contact" style="display:block;padding:8px 6px">Contattami</a>
+      <nav class="main-nav">
+        <a href="#about">Chi sono</a>
+        <a href="#skills">Skills</a>
+        <a href="#projects">Progetti</a>
+        <a href="#social">Social</a>
       </nav>
     </div>
   </header>
 
-  <main id="mainContent" role="main">
-
-    <!-- SEZIONE: ABOUT -->
-    <section id="about" aria-labelledby="aboutTitle">
+  <main>
+    <section id="about" class="glass visible">
       <div class="hero">
-        <div class="avatar" role="img" aria-label="Foto di Anto">
-          <img src="anto.jpg" alt="Anto immagine profilo">
+        <div class="avatar-container">
+          <img src="anto.jpg" alt="Anto">
         </div>
         <div class="bio">
-          <h2 id="aboutTitle">Chi sono</h2>
-          <h3>Ciao, sono <strong>Anto</strong> — appassionato di informatica</h3>
-          <p class="lead">Creo progetti web, bot, app e tool utili. Mi piace imparare e mettere in pratica nuove tecnologie: dal front-end al back-end, passando per l'automazione e l'integrazione con servizi esterni.</p>
-
-          <ul aria-hidden="true">
-            <li class="skill-chip">Web Dev</li>
-            <li class="skill-chip">Firebase</li>
-            <li class="skill-chip">GitHub</li>
-            <li class="skill-chip">Design</li>
-          </ul>
+          <h1 style="margin:0; font-size: 2rem;">Ciao, sono <span style="color:var(--accent)">Anto</span></h1>
+          <p style="color: var(--text-muted); line-height: 1.6;">
+            Creo progetti web, bot e tool innovativi. Amo trasformare idee complesse in interfacce semplici e funzionali, con un occhio di riguardo per l'automazione.
+          </p>
+          <div class="skills-grid">
+            <span class="skill-chip">Web Dev</span>
+            <span class="skill-chip">Python</span>
+            <span class="skill-chip">UI/UX</span>
+          </div>
         </div>
       </div>
     </section>
 
-    <!-- SEZIONE: SKILLS -->
-    <section id="skills" aria-labelledby="skillsTitle">
-      <h2 id="skillsTitle">Skills</h2>
-      <div class="skills-grid" role="list" aria-label="Elenco delle mie competenze">
-        <div class="skills-grid" role="list" aria-label="Elenco delle mie competenze">
-        <div class="skill-chip" role="listitem">HTML</div>
-        <div class="skill-chip" role="listitem">CSS</div>
-        <div class="skill-chip" role="listitem">JavaScript</div>
-        <div class="skill-chip" role="listitem">VB.NET</div>
-        <div class="skill-chip" role="listitem">Canva</div>
-        <div class="skill-chip" role="listitem">Firebase</div>
-<div class="skill-chip" role="listitem">GitHub</div>
-<div class="skill-chip" role="listitem">Python</div>
+    <section id="skills" class="glass">
+      <h2 style="margin-top:0"><i class="fa fa-code"></i> Competenze</h2>
+      <div class="skills-grid">
+        <div class="skill-chip">HTML5</div>
+        <div class="skill-chip">CSS3</div>
+        <div class="skill-chip">JavaScript</div>
+        <div class="skill-chip">Python</div>
+        <div class="skill-chip">VB.NET</div>
+        <div class="skill-chip">Firebase</div>
+        <div class="skill-chip">GitHub</div>
+        <div class="skill-chip">Figma</div>
+        <div class="skill-chip">Canva</div>
       </div>
     </section>
 
-    <!-- SEZIONE: PROGETTI -->
-    <section id="projects" aria-labelledby="projectsTitle">
-      <h2 id="projectsTitle">Progetti</h2>
+    <section id="projects">
+      <h2 style="margin-left: 10px;">Progetti Recenti</h2>
       <div class="projects-grid">
-        <div class="card">
-          <div class="title">
-            <h3>Aura</h3>
-            <span class="meta">Iniziativa • 2023</span>
-          </div>
-          <p>Iniziativa sul software & app developing alla Google.</p>
-          <div class="actions">
-            <a href="https://aurastudioitalia.it/join-aura" class="btn primary"><i class="fa fa-heart"></i> Join Aura!</a>
-          </div>
+        <div class="card glass">
+          <h3>Aura</h3>
+          <p style="font-size: 0.9rem; color: var(--text-muted)">Iniziativa sul software & app developing ispirata al modello Google.</p>
+          <a href="https://aurastudioitalia.it/join-aura" class="btn primary">Scopri di più</a>
         </div>
-
-        <div class="card">
-          <div class="title">
-            <h3>MyTool ;)</h3>
-            <span class="meta">Tool • 2025</span>
-          </div>
-          <p>Tool in Python per la raccolta di dati informatici.</p>
-          <div class="actions">
-            <a href="https://t.me/mytoolabout" class="btn primary"><i class="fa fa-book"></i> About su Telegram</a>
-          </div>
+        <div class="card glass">
+          <h3>MyTool ;)</h3>
+          <p style="font-size: 0.9rem; color: var(--text-muted)">Potente tool in Python per la raccolta di dati informatici e analisi.</p>
+          <a href="https://t.me/mytoolabout" class="btn primary">Telegram</a>
         </div>
-
-        <div class="card">
-          <div class="title">
-            <h3>Pynux</h3>
-            <span class="meta">"Distro" • 2025</span>
-          </div>
-          <p>Una simulazione di Linux scritta in Python.</p>
-          <div class="actions">
-            <a href="#card" class="btn primary"><i class="fa fa-code"></i> In sviluppo</a>
-          </div>
-        </div>
-
-<div class="card">
-          <div class="title">
-            <h3>ShareMiiShot</h3>
-            <span class="meta">Servizio web • 2025</span>
-          </div>
-          <p>ShareMiiShot è un servizio web che permette la condivisione di foto tra Wii U/3DS e altri dispositivi come telefoni e PC.</p>
-          <div class="actions">
-            <a href="https://madebyanto.github.io/sharemiishot" class="btn primary"><i class="fa fa-book"></i> Vai al sito</a>
-          </div>
+        <div class="card glass">
+          <h3>ShareMiiShot</h3>
+          <p style="font-size: 0.9rem; color: var(--text-muted)">Condivisione foto tra Wii U/3DS e smartphone in modo rapido.</p>
+          <a href="https://madebyanto.github.io/sharemiishot" class="btn primary">Visita</a>
         </div>
       </div>
     </section>
 
-    <!-- SEZIONE: SOCIAL -->
-    <section id="social" aria-labelledby="socialTitle">
-      <h2 id="socialTitle">Seguimi sui social</h2>
+    <section id="social" class="glass">
+      <h2 style="margin-top:0">Social Media</h2>
       <div class="social-row">
-        <a class="social-link social-youtube" href="https://youtube.com/@madebyanto" target="_blank"><i class="fa-brands fa-youtube"></i><span class="label">YouTube</span></a>
-        <a class="social-link social-tiktok" href="https://tiktok.com/@madebyanto.dev" target="_blank"><i class="fa-brands fa-tiktok"></i><span class="label">TikTok</span></a>
-        <a class="social-link social-discord" href="https://discord.gg/Q2cT5J8Q" target="_blank"><i class="fa-brands fa-discord"></i><span class="label">Discord</span></a>
-        <a class="social-link social-telegram" href="https://t.me/madebyanto" target="_blank"><i class="fa-brands fa-telegram"></i><span class="label">Telegram</span></a>
-        <a class="social-link social-github" href="https://github.com/madebyanto" target="_blank"><i class="fa-brands fa-github"></i><span class="label">GitHub</span></a>
+        <a class="social-link social-youtube" href="https://youtube.com/@madebyanto" target="_blank"><i class="fa-brands fa-youtube"></i>YouTube</a>
+        <a class="social-link social-tiktok" href="https://tiktok.com/@madebyanto.dev" target="_blank"><i class="fa-brands fa-tiktok"></i>TikTok</a>
+        <a class="social-link social-discord" href="https://discord.gg/s4DjMa2YG5" target="_blank"><i class="fa-brands fa-discord"></i>Discord</a>
+        <a class="social-link social-github" href="https://github.com/madebyanto" target="_blank"><i class="fa-brands fa-github"></i>GitHub</a>
       </div>
     </section>
-
-   
   </main>
 
-  <footer class="site-footer">
-    &copy; 2025 Anto • Tutti i diritti riservati
+  <footer style="text-align: center; padding: 40px; color: var(--text-muted); font-size: 0.8rem;">
+    &copy; 2026 Anto • Sayori la mia pucci 🥹
   </footer>
 
-  <!-- ===== SCRIPT ===== -->
-<script src='https://storage.ko-fi.com/cdn/scripts/overlay-widget.js'></script>
-<script>
-  kofiWidgetOverlay.draw('madebyanto', {
-    'type': 'floating-chat',
-    'floating-chat.donateButton.text': 'Support me',
-    'floating-chat.donateButton.background-color': '#fcbf47',
-    'floating-chat.donateButton.text-color': '#323842'
-  });
-</script>
-  
   <script>
-    // Menu mobile toggle
-    const hamburger = document.getElementById('hamburger');
-    const mobileMenu = document.getElementById('mobileMenu');
-    hamburger.addEventListener('click', () => {
-      const expanded = hamburger.getAttribute('aria-expanded') === 'true' || false;
-      hamburger.setAttribute('aria-expanded', !expanded);
-      mobileMenu.style.display = expanded ? 'none' : 'block';
+    // Intersection Observer per animazioni all'apparizione
+    const observerOptions = { threshold: 0.1 };
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, observerOptions);
+
+    document.querySelectorAll('section').forEach(section => {
+      observer.observe(section);
     });
 
-    // Effetto fade-in sezioni
-    const sections = document.querySelectorAll('section');
-    const observer = new IntersectionObserver(entries => {
-      entries.forEach(entry => {
-        if(entry.isIntersecting) entry.target.classList.add('visible');
+    // Highlight menu attivo allo scroll
+    window.addEventListener('scroll', () => {
+      let current = "";
+      document.querySelectorAll('section').forEach(section => {
+        const sectionTop = section.offsetTop;
+        if (pageYOffset >= sectionTop - 150) {
+          current = section.getAttribute('id');
+        }
       });
-    }, { threshold: 0.15 });
-    sections.forEach(sec => observer.observe(sec));
-
-    // Form demo
-    function handleForm(event){
-      event.preventDefault();
-      alert('Grazie per avermi scritto! Il messaggio è stato inviato.');
-      document.getElementById('contactForm').reset();
-    }
+      document.querySelectorAll('.main-nav a').forEach(a => {
+        a.classList.remove('active');
+        if (a.getAttribute('href').includes(current)) {
+          a.classList.add('active');
+        }
+      });
+    });
   </script>
 </body>
-  </html>
+</html>
