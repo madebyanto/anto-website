@@ -204,26 +204,22 @@ for i in range(5):
 
       var startTime = new Date().getTime();
 
-      var promise = Sk.misceval.asyncToPromise(function() {
-        return Sk.importMainWithBody("<stdin>", false, code, true);
-      });
-
-      // Skulpt restituisce una Promise; su browser vecchi potrebbe non esserci
-      // Promise nativa, ma Skulpt include il suo sistema di callback
-      promise.then(
-        function() {
-          var elapsed = new Date().getTime() - startTime;
-          statusEl.innerText = "Completato in " + elapsed + "ms";
-          if (outputText === "") {
-            outputBox.innerText = "(nessun output)";
-          }
-        },
-        function(err) {
-          outputBox.className = "error-text";
-          outputBox.innerText = "Errore Python:\n" + err.toString();
-          statusEl.innerText = "Errore durante l'esecuzione.";
+      try {
+        // Esecuzione sincrona, senza Promise
+        Sk.misceval.iterate(
+          Sk.importMainWithBody("<stdin>", false, code, true),
+          function() {} // callback per ogni step
+        );
+        var elapsed = new Date().getTime() - startTime;
+        statusEl.innerText = "Completato in " + elapsed + "ms";
+        if (outputText === "") {
+          outputBox.innerText = "(nessun output)";
         }
-      );
+      } catch(err) {
+        outputBox.className = "error-text";
+        outputBox.innerText = "Errore Python:\n" + err.toString();
+        statusEl.innerText = "Errore durante l'esecuzione.";
+      }
     }
 
     function clearOutput() {
