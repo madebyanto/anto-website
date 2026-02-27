@@ -3,106 +3,253 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Esegui JS - Playground</title>
+  <title>Esegui Python - Playground</title>
+
+  <!-- Skulpt: interprete Python scritto in JS, compatibile con WebKit vecchio -->
+  <script src="https://skulpt.org/js/skulpt.min.js" type="text/javascript"></script>
+  <script src="https://skulpt.org/js/skulpt-stdlib.js" type="text/javascript"></script>
+
   <style>
-    :root{font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;}
-    body{margin:0;display:flex;flex-direction:column;height:100vh}
-    header{padding:12px 16px;background:#0f172a;color:#fff;display:flex;gap:12px;align-items:center}
-    main{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:12px;flex:1}
-    textarea{width:100%;height:100%;resize:none;padding:12px;font-family:monospace;font-size:14px;border-radius:8px;border:1px solid #e2e8f0}
-    .controls{display:flex;gap:8px}
-    button{padding:8px 12px;border-radius:8px;border:0;cursor:pointer}
-    button.run{background:#06b6d4;color:#04203a}
-    button.clear{background:#f3f4f6}
-    .panel{display:flex;flex-direction:column}
-    iframe{width:100%;height:100%;border:1px solid #e2e8f0;border-radius:8px;background:white}
-    footer{padding:8px 12px;font-size:13px;background:#f8fafc;border-top:1px solid #e2e8f0}
-    .hint{opacity:0.85;font-size:13px}
+    /* Niente variabili CSS (--var): non supportate da WebKit 534 della Wii U */
+    html { font-family: Arial, sans-serif; }
+    body { margin: 0; padding: 0; }
+
+    /* Header */
+    #header {
+      padding: 12px 16px;
+      background: #0f172a;
+      color: #ffffff;
+    }
+    #header strong { font-size: 16px; }
+    #hint {
+      font-size: 13px;
+      opacity: 0.85;
+      margin-top: 4px;
+      color: #cbd5e1;
+    }
+
+    /* Layout: due colonne con float invece di grid/flexbox avanzato */
+    #main {
+      padding: 12px;
+      overflow: hidden; /* clearfix */
+    }
+    #left-panel {
+      float: left;
+      width: 48%;
+      margin-right: 2%;
+    }
+    #right-panel {
+      float: left;
+      width: 50%;
+    }
+
+    label {
+      font-weight: bold;
+      display: block;
+      margin-bottom: 6px;
+    }
+
+    textarea {
+      width: 96%;
+      height: 300px;
+      padding: 10px;
+      font-family: monospace;
+      font-size: 14px;
+      border: 1px solid #cccccc;
+      border-radius: 4px;
+      resize: vertical;
+      display: block;
+    }
+
+    /* Controlli */
+    #controls {
+      margin-top: 8px;
+    }
+    #controls button {
+      padding: 8px 12px;
+      border: 0;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 14px;
+      margin-right: 6px;
+    }
+    #runBtn   { background: #06b6d4; color: #04203a; font-weight: bold; }
+    #clearBtn { background: #f3f4f6; }
+    #sampleBtn { background: #f3f4f6; }
+
+    /* Output */
+    #output-box {
+      width: 96%;
+      height: 300px;
+      background: #111827;
+      color: #d1fae5;
+      font-family: monospace;
+      font-size: 14px;
+      padding: 10px;
+      border: 1px solid #cccccc;
+      border-radius: 4px;
+      overflow-y: auto;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      box-sizing: border-box;
+    }
+    #output-box.error-text {
+      color: #fca5a5;
+    }
+
+    /* Status bar sotto l'output */
+    #status {
+      margin-top: 6px;
+      font-size: 12px;
+      color: #64748b;
+    }
+
+    /* Footer */
+    #footer {
+      clear: both;
+      padding: 8px 12px;
+      font-size: 13px;
+      background: #f8fafc;
+      border-top: 1px solid #e2e8f0;
+      color: #475569;
+    }
   </style>
 </head>
 <body>
-  <header>
-    <strong>Esegui JS — playground</strong>
-    <div style="margin-left:auto;display:flex;gap:8px;align-items:center">
-      <span class="hint">Scrivi <code>alert('ciao')</code> e premi Run → vedrai l'alert nel riquadro a destra</span>
-    </div>
-  </header>
 
-  <main>
-    <div class="panel">
-      <label style="font-weight:600;margin-bottom:6px">Editor JavaScript</label>
-      <textarea id="editor">// Esempio: alert('Ciao dal browser!')
+  <div id="header">
+    <strong>Esegui Python &mdash; Playground (Wii U compatible)</strong>
+    <div id="hint">Scrivi codice Python e premi <strong>Run</strong>. L&apos;output appare a destra.</div>
+  </div>
+
+  <div id="main">
+
+    <div id="left-panel">
+      <label for="editor">Editor Python</label>
+      <textarea id="editor">print("Ciao dal browser della Wii U!")
+print("2 + 2 =", 2 + 2)
+
+for i in range(5):
+    print("Riga", i + 1)
 </textarea>
-      <div style="margin-top:8px" class="controls">
-        <button class="run" id="runBtn">Run</button>
-        <button class="clear" id="clearBtn">Clear</button>
-        <button id="sampleBtn">Inserisci esempio</button>
-        <button id="newtabBtn">Apri in nuova scheda</button>
+      <div id="controls">
+        <button id="runBtn">&#9654; Run</button>
+        <button id="clearBtn">Clear</button>
+        <button id="sampleBtn">Esempio</button>
       </div>
     </div>
 
-    <div class="panel">
-      <label style="font-weight:600;margin-bottom:6px">Output (iframe con sandbox)</label>
-      <iframe id="output" sandbox="allow-scripts"></iframe>
+    <div id="right-panel">
+      <label>Output</label>
+      <div id="output-box">Premi Run per eseguire il codice Python...</div>
+      <div id="status"></div>
     </div>
-  </main>
 
-  <footer>
-    <div style="display:flex;justify-content:space-between;align-items:center">
-      <div class="hint">Attenzione: questo esegue codice JS localmente. Non eseguire codice non fidato.</div>
-      <div class="hint">Salva il file come <code>.html</code> e aprilo nel browser.</div>
-    </div>
-  </footer>
+  </div>
 
-  <script>
-    const editor = document.getElementById('editor');
-    const runBtn = document.getElementById('runBtn');
-    const clearBtn = document.getElementById('clearBtn');
-    const sampleBtn = document.getElementById('sampleBtn');
-    const output = document.getElementById('output');
-    const newtabBtn = document.getElementById('newtabBtn');
+  <div id="footer">
+    Attenzione: il codice viene eseguito localmente nel browser tramite Skulpt (Python 2/3 subset).
+    Salva il file come <strong>.html</strong> e aprilo nel browser della Wii U.
+  </div>
 
-    // Funzione che costruisce un documento HTML con lo script inserito
-    function buildSrcDoc(code){
-      // Evitiamo che la stringa contenga </script> che chiuderebbe il tag script in modo non intenzionale
-      const safeCode = code.replace(/<\//g, '<\\/').replace(/<\/script>/gi, '<\\/script>');
-      return `<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head><body>
-        <script>
-          try {
-            ${safeCode}
-          } catch(e) {
-            console.error('Errore eseguendo il codice:', e);
+  <script type="text/javascript">
+
+    // ----- Compatibilità IE/WebKit vecchio: no const/let, no arrow functions -----
+
+    var editor    = document.getElementById('editor');
+    var runBtn    = document.getElementById('runBtn');
+    var clearBtn  = document.getElementById('clearBtn');
+    var sampleBtn = document.getElementById('sampleBtn');
+    var outputBox = document.getElementById('output-box');
+    var statusEl  = document.getElementById('status');
+
+    // Esempio di codice Python di dimostrazione
+    var SAMPLE_CODE = [
+      "# Esempio: FizzBuzz",
+      "for i in range(1, 21):",
+      "    if i % 15 == 0:",
+      "        print('FizzBuzz')",
+      "    elif i % 3 == 0:",
+      "        print('Fizz')",
+      "    elif i % 5 == 0:",
+      "        print('Buzz')",
+      "    else:",
+      "        print(i)"
+    ].join("\n");
+
+    function runCode() {
+      var code = editor.value;
+      var outputText = "";
+
+      outputBox.className = ""; // rimuovi classe errore
+      outputBox.innerText = "";
+      statusEl.innerText = "Esecuzione in corso...";
+
+      // Configurazione Skulpt
+      Sk.configure({
+        output: function(text) {
+          outputText += text;
+          outputBox.innerText = outputText;
+        },
+        read: function(filename) {
+          if (Sk.builtinFiles === undefined ||
+              Sk.builtinFiles["files"][filename] === undefined) {
+            throw "File non trovato: '" + filename + "'";
           }
-        <\\/script>
-      </body></html>`;
+          return Sk.builtinFiles["files"][filename];
+        },
+        // Limite di tempo per evitare loop infiniti (ms)
+        execLimit: 5000
+      });
+
+      var startTime = new Date().getTime();
+
+      var promise = Sk.misceval.asyncToPromise(function() {
+        return Sk.importMainWithBody("<stdin>", false, code, true);
+      });
+
+      // Skulpt restituisce una Promise; su browser vecchi potrebbe non esserci
+      // Promise nativa, ma Skulpt include il suo sistema di callback
+      promise.then(
+        function() {
+          var elapsed = new Date().getTime() - startTime;
+          statusEl.innerText = "Completato in " + elapsed + "ms";
+          if (outputText === "") {
+            outputBox.innerText = "(nessun output)";
+          }
+        },
+        function(err) {
+          outputBox.className = "error-text";
+          outputBox.innerText = "Errore Python:\n" + err.toString();
+          statusEl.innerText = "Errore durante l'esecuzione.";
+        }
+      );
     }
 
-    function runCode(){
-      const code = editor.value;
-      output.srcdoc = buildSrcDoc(code);
+    function clearOutput() {
+      editor.value = "";
+      outputBox.className = "";
+      outputBox.innerText = "Premi Run per eseguire il codice Python...";
+      statusEl.innerText = "";
     }
 
-    runBtn.addEventListener('click', runCode);
+    function insertSample() {
+      editor.value = SAMPLE_CODE;
+    }
 
-    clearBtn.addEventListener('click', ()=>{
-      editor.value = '';
-      output.srcdoc = '<!doctype html><html><body></body></html>';
-    });
+    // Compatibilità: addEventListener con fallback a attachEvent (IE8)
+    function addEvent(el, evt, fn) {
+      if (el.addEventListener) {
+        el.addEventListener(evt, fn, false);
+      } else if (el.attachEvent) {
+        el.attachEvent("on" + evt, fn);
+      }
+    }
 
-    sampleBtn.addEventListener('click', ()=>{
-      editor.value = "alert('Ciao dal playground!');";
-    });
+    addEvent(runBtn,    "click", runCode);
+    addEvent(clearBtn,  "click", clearOutput);
+    addEvent(sampleBtn, "click", insertSample);
 
-    newtabBtn.addEventListener('click', ()=>{
-      const win = window.open();
-      if(!win) return alert('Impossibile aprire una nuova finestra (popup bloccato).');
-      win.document.open();
-      win.document.write(buildSrcDoc(editor.value));
-      win.document.close();
-    });
-
-    // inizializza iframe vuoto
-    output.srcdoc = '<!doctype html><html><body></body></html>';
   </script>
 </body>
-      </html>
+</html>
